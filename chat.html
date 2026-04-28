@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Чат АТАМАНИ</title>
-    <!-- Правильное подключение Firebase SDK (совместимая версия) -->
     <script src="https://www.gstatic.com/firebasejs/10.13.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.13.0/firebase-firestore-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.13.0/firebase-auth-compat.js"></script>
@@ -41,6 +40,8 @@
             overflow-y: auto;
             padding: 20px;
             background: #121212;
+            display: flex;
+            flex-direction: column;
         }
         .message {
             padding: 10px 14px;
@@ -95,7 +96,6 @@
             cursor: pointer;
         }
         .hidden { display: none; }
-        .messages-area { display: flex; flex-direction: column; }
     </style>
 </head>
 <body>
@@ -118,18 +118,15 @@
 </div>
 
 <script>
-    // ВАШИ ДАННЫЕ (исправьте apiKey – у вас опечатка: "AIZaSy..." должно быть "AIzaSy...")
     const firebaseConfig = {
         apiKey: "AIzaSyBM2BzycMF6u-WAazEO1mv6baWV2U8PfY0",
         authDomain: "atamanichat.firebaseapp.com",
         projectId: "atamanichat",
-        storageBucket: "atamanichat.firebasestorage.app", // можно заменить на "atamanichat.appspot.com" если не работает
+        storageBucket: "atamanichat.firebasestorage.app",
         messagingSenderId: "5050919943",
         appId: "1:5050919943:web:ee84c743c59f9094b2cea2",
         measurementId: "G-8XRZPYBDCQ"
     };
-
-    // Инициализация Firebase (Compat)
     firebase.initializeApp(firebaseConfig);
     const auth = firebase.auth();
     const db = firebase.firestore();
