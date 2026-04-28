@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <script src="https://www.gstatic.com/firebasejs/10.13.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.13.0/firebase-auth-compat.js"></script>
+</head>
+<body>
+    <button id="login">Войти анонимно</button>
+    <div id="status"></div>
+    <script>
+        const firebaseConfig = {
+            apiKey: "AIzaSyBM2BzycMF6u-WAaZeO1mv6baWV2U8PfY0",
+            authDomain: "atamanichat.firebaseapp.com",
+            projectId: "atamanichat",
+            storageBucket: "atamanichat.firebasestorage.app",
+            messagingSenderId: "5050919943",
+            appId: "1:5050919943:web:ee84c743c59f9094b2cea2",
+            measurementId: "G-8XRZPYBDCQ"
+        };
+        firebase.initializeApp(firebaseConfig);
+        const auth = firebase.auth();
+        document.getElementById('login').onclick = () => {
+            auth.signInAnonymously()
+                .then(() => document.getElementById('status').innerText = 'Успешно вошли!')
+                .catch(e => document.getElementById('status').innerText = 'Ошибка: ' + e.message);
+        };
+    </script>
+</body>
+</html>
