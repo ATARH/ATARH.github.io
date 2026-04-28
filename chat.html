@@ -18,149 +18,125 @@
             min-height: 100vh;
             padding: 20px;
         }
-        /* Контейнер чата — стилизация под ваш сайт */
         .chat-container {
             width: 100%;
-            max-width: 900px;
-            background: linear-gradient(145deg, #1a1a1a 0%, #0f0f0f 100%);
-            border-radius: 24px;
-            box-shadow: 0 20px 35px rgba(0,0,0,0.5), 0 0 0 1px rgba(245,197,66,0.2);
+            max-width: 800px;
+            background: #1e1e1e;
+            border-radius: 16px;
             overflow: hidden;
             display: flex;
             flex-direction: column;
             height: 85vh;
-            backdrop-filter: blur(2px);
+            box-shadow: 0 8px 24px rgba(0,0,0,0.5);
         }
         .chat-header {
-            background: #000000aa;
-            backdrop-filter: blur(10px);
-            padding: 18px 24px;
-            border-bottom: 2px solid #f5c542;
+            background: #2c2c2c;
+            padding: 16px 20px;
+            border-bottom: 1px solid #3a3a3a;
             display: flex;
             justify-content: space-between;
-            align-items: baseline;
-            flex-wrap: wrap;
-        }
-        .title h2 {
-            color: #f5c542;
-            font-size: 1.6rem;
-            letter-spacing: 1px;
-            text-shadow: 0 0 5px rgba(245,197,66,0.3);
-        }
-        .title p {
-            color: #bbb;
-            font-size: 0.8rem;
-        }
-        .chat-controls {
-            display: flex;
-            gap: 12px;
             align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
         }
-        .logout-btn, .clear-btn {
-            background: #2c2c2c;
-            border: none;
-            padding: 6px 14px;
-            border-radius: 40px;
-            color: #f5c542;
-            font-weight: bold;
-            cursor: pointer;
-            transition: 0.2s;
-            font-size: 0.8rem;
+        .chat-header h2 { color: #f5c542; font-size: 1.3rem; }
+        .chat-header p { color: #aaa; font-size: 0.8rem; margin-top: 4px; }
+        .header-buttons {
+            display: flex;
+            gap: 10px;
         }
-        .logout-btn:hover, .clear-btn:hover {
+        .header-buttons button {
             background: #3a3a3a;
-            color: #ffd966;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 20px;
+            color: #eee;
+            cursor: pointer;
+            font-size: 0.8rem;
+            transition: 0.2s;
         }
-        .clear-btn {
-            background: #3a2a1f;
-            color: #ffaa66;
+        .header-buttons button:hover {
+            background: #f5c542;
+            color: #1e1e1e;
         }
         .messages-area {
             flex: 1;
             overflow-y: auto;
             padding: 20px;
+            background: #121212;
             display: flex;
             flex-direction: column;
-            gap: 12px;
-            background: rgba(10,10,10,0.7);
         }
         .message {
-            padding: 10px 16px;
-            border-radius: 20px;
+            padding: 10px 14px;
+            border-radius: 18px;
+            margin-bottom: 12px;
             max-width: 80%;
             word-wrap: break-word;
-            animation: fadeIn 0.2s ease;
         }
         .message-user {
-            background: #2a2e3a;
+            background: #2b2f3a;
             align-self: flex-start;
-            border-left: 3px solid #f5c542;
         }
         .message-own {
             background: #3a2c1f;
             align-self: flex-end;
-            border-right: 3px solid #f5c542;
         }
         .message-name {
             font-weight: bold;
             font-size: 0.85rem;
-            color: #f5c542;
             margin-bottom: 4px;
-            display: flex;
-            justify-content: space-between;
-            gap: 12px;
+            color: #f5c542;
         }
         .message-time {
             font-size: 0.7rem;
-            color: #aaa;
-            margin-top: 4px;
+            color: #888;
             text-align: right;
+            margin-top: 4px;
         }
         .input-area {
             display: flex;
             gap: 12px;
-            padding: 16px 20px;
-            background: #111;
+            padding: 16px;
+            background: #1a1a1a;
             border-top: 1px solid #333;
         }
         .input-area input {
             flex: 1;
-            background: #222;
+            background: #2c2c2c;
             border: none;
             border-radius: 40px;
             padding: 12px 18px;
             color: white;
             font-size: 1rem;
             outline: none;
-            transition: 0.2s;
-        }
-        .input-area input:focus {
-            background: #2a2a2a;
-            box-shadow: 0 0 0 2px #f5c54266;
         }
         .input-area button {
             background: #f5c542;
             border: none;
             border-radius: 40px;
-            padding: 0 28px;
+            padding: 0 24px;
             font-weight: bold;
-            color: #111;
             cursor: pointer;
             transition: 0.2s;
-            font-size: 1rem;
         }
         .input-area button:hover {
             background: #e0b03b;
-            transform: scale(1.02);
         }
         .login-panel {
             text-align: center;
-            padding: 50px 20px;
-            background: #1a1a1a;
+            padding: 40px;
         }
-        .login-panel p {
-            color: #ddd;
-            margin-bottom: 20px;
+        .login-panel input {
+            background: #2c2c2c;
+            border: none;
+            border-radius: 40px;
+            padding: 12px 18px;
+            color: white;
+            width: 80%;
+            margin: 20px auto;
+            display: block;
+            text-align: center;
         }
         .login-panel button {
             background: #f5c542;
@@ -168,73 +144,40 @@
             padding: 12px 32px;
             border-radius: 40px;
             font-weight: bold;
-            font-size: 1.1rem;
+            margin-top: 16px;
             cursor: pointer;
-        }
-        .name-change-area {
-            display: flex;
-            gap: 8px;
-            padding: 10px 20px;
-            background: #0a0a0a;
-            border-bottom: 1px solid #2a2a2a;
-        }
-        .name-change-area input {
-            background: #222;
-            border: none;
-            border-radius: 40px;
-            padding: 6px 14px;
-            color: white;
-            flex: 1;
-        }
-        .name-change-area button {
-            background: #3a3a3a;
-            border: none;
-            border-radius: 40px;
-            padding: 6px 16px;
-            color: #f5c542;
-            cursor: pointer;
-            font-weight: bold;
         }
         .hidden { display: none; }
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(5px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        /* Адаптив под телефон */
-        @media (max-width: 600px) {
-            .message { max-width: 95%; }
-            .chat-header { flex-direction: column; gap: 10px; }
-            .input-area { gap: 6px; }
-            .input-area button { padding: 0 18px; }
+        .status {
+            color: #aaa;
+            font-size: 0.8rem;
+            text-align: center;
+            margin-top: 8px;
         }
     </style>
 </head>
 <body>
 <div class="chat-container">
     <div class="chat-header">
-        <div class="title">
+        <div>
             <h2>🎧 Чат АТАМАНИ</h2>
             <p>Общайтесь со мной и другими слушателями</p>
         </div>
-        <div class="chat-controls">
-            <button id="clearChatBtn" class="clear-btn" title="Очистить все сообщения (только для АТАМАНИ)">🧹 Очистить</button>
-            <button id="logoutBtn" class="logout-btn">🚪 Выйти</button>
+        <div class="header-buttons" id="commonButtons" style="display: none;">
+            <button id="changeNameBtn">✏️ Сменить имя</button>
+            <button id="logoutBtn">🚪 Выйти</button>
+        </div>
+        <div class="header-buttons" id="adminButtons" style="display: none;">
+            <button id="clearChatBtn">🧹 Очистить чат</button>
+            <button id="logoutBtnAdmin">🚪 Выйти</button>
         </div>
     </div>
-
-    <!-- Панель входа (показывается, если не авторизован) -->
     <div id="loginPanel" class="login-panel">
-        <p>🔐 Войдите анонимно, чтобы начать общение</p>
+        <p>🔐 Войдите, чтобы начать общение</p>
+        <input type="text" id="nicknameInput" placeholder="Ваше имя (как вас называть?)" maxlength="30">
         <button id="loginBtn">Войти в чат →</button>
     </div>
-
-    <!-- Интерфейс чата (виден после входа) -->
     <div id="chatInterface" class="hidden" style="display: flex; flex-direction: column; height: 100%;">
-        <!-- Смена имени -->
-        <div class="name-change-area">
-            <input type="text" id="nicknameInput" placeholder="Ваше имя (отобразится в чате)" maxlength="30">
-            <button id="changeNameBtn">Сменить имя</button>
-        </div>
         <div id="messagesArea" class="messages-area"></div>
         <div class="input-area">
             <input type="text" id="messageInput" placeholder="Ваше сообщение...">
@@ -244,7 +187,7 @@
 </div>
 
 <script>
-    // Firebase конфиг (ваш)
+    // ========== НАСТРОЙКИ FIREBASE ==========
     const firebaseConfig = {
         apiKey: "AIzaSyBM2BzycMF6u-WAazEO1mv6baWV2U8PfY0",
         authDomain: "atamanichat.firebaseapp.com",
@@ -258,82 +201,87 @@
     const auth = firebase.auth();
     const db = firebase.firestore();
 
-    // DOM элементы
+    // Элементы DOM
     const loginPanel = document.getElementById('loginPanel');
     const chatInterface = document.getElementById('chatInterface');
     const loginBtn = document.getElementById('loginBtn');
-    const logoutBtn = document.getElementById('logoutBtn');
+    const nicknameInput = document.getElementById('nicknameInput');
     const sendBtn = document.getElementById('sendBtn');
     const messageInput = document.getElementById('messageInput');
     const messagesArea = document.getElementById('messagesArea');
-    const nicknameInput = document.getElementById('nicknameInput');
-    const changeNameBtn = document.getElementById('changeNameBtn');
+    const logoutBtn = document.getElementById('logoutBtn');
+    const logoutBtnAdmin = document.getElementById('logoutBtnAdmin');
     const clearChatBtn = document.getElementById('clearChatBtn');
+    const changeNameBtn = document.getElementById('changeNameBtn');
+    const commonButtons = document.getElementById('commonButtons');
+    const adminButtons = document.getElementById('adminButtons');
 
     let currentUser = null;
+    let currentNickname = "";
     let unsubscribeMessages = null;
-    let currentNickname = '';
+    let isAdmin = false;
 
-    // Функция получения имени пользователя из Firestore (документ users/{uid})
-    async function loadUserNickname(uid) {
-        try {
-            const doc = await db.collection('users').doc(uid).get();
-            if (doc.exists && doc.data().nickname) {
-                currentNickname = doc.data().nickname;
-                nicknameInput.value = currentNickname;
-            } else {
-                // По умолчанию: Слушатель_ + последние 4 символа UID
-                const defaultName = `Слушатель_${uid.slice(-4)}`;
-                currentNickname = defaultName;
-                nicknameInput.value = defaultName;
-                await db.collection('users').doc(uid).set({ nickname: defaultName });
-            }
-        } catch(e) { console.error(e); }
-    }
+    // 👑 ВСТАВЬТЕ СВОЙ UID (узнайте по инструкции ниже)
+    const ADMIN_UID = "ВАШ_UID_ВСТАВЬТЕ_СЮДА";
 
-    // Сохранение имени в Firestore
-    async function saveNickname(uid, newName) {
-        if (!newName.trim()) return false;
-        try {
-            await db.collection('users').doc(uid).set({ nickname: newName.trim() }, { merge: true });
-            currentNickname = newName.trim();
-            return true;
-        } catch(e) { alert('Ошибка сохранения имени'); return false; }
-    }
-
-    // Вход / выход
+    // Функция входа (с сохранением имени)
     loginBtn.onclick = () => {
+        let nickname = nicknameInput.value.trim();
+        if (nickname === "") {
+            alert("Пожалуйста, введите ваше имя");
+            return;
+        }
+        localStorage.setItem("chatNickname", nickname);
         auth.signInAnonymously().catch(e => alert('Ошибка входа: ' + e.message));
     };
 
-    logoutBtn.onclick = () => {
-        auth.signOut().catch(e => alert('Ошибка выхода: ' + e.message));
-    };
-
-    // Смена имени
-    changeNameBtn.onclick = async () => {
-        if (!currentUser) return;
-        const newName = nicknameInput.value.trim();
-        if (newName === '') return;
-        if (await saveNickname(currentUser.uid, newName)) {
-            // Имя в текущих сообщениях не обновится (хранятся старые), но новые будут с новым именем
-            alert('Имя изменено! Новые сообщения будут с этим именем.');
+    // Смена имени (доступна всегда после входа)
+    function changeNickname() {
+        const newName = prompt("Введите новое имя:", currentNickname);
+        if (newName && newName.trim() !== "") {
+            currentNickname = newName.trim();
+            localStorage.setItem("chatNickname", currentNickname);
+            alert(`Теперь вас зовут ${currentNickname}`);
         }
-    };
+    }
 
-    // Отслеживание состояния пользователя
     auth.onAuthStateChanged(async (user) => {
         if (user) {
             currentUser = user;
+            // Загружаем ник из localStorage
+            let savedNick = localStorage.getItem("chatNickname");
+            if (savedNick) {
+                currentNickname = savedNick;
+            } else {
+                currentNickname = "Слушатель_" + user.uid.slice(-4);
+            }
+            // Проверка на администратора
+            if (user.uid === ADMIN_UID) {
+                isAdmin = true;
+                adminButtons.style.display = "flex";
+                commonButtons.style.display = "none";
+                if (logoutBtnAdmin) logoutBtnAdmin.onclick = () => { auth.signOut(); location.reload(); };
+                if (clearChatBtn) clearChatBtn.onclick = clearAllMessages;
+            } else {
+                isAdmin = false;
+                adminButtons.style.display = "none";
+                commonButtons.style.display = "flex";
+                if (logoutBtn) logoutBtn.onclick = () => { auth.signOut(); location.reload(); };
+                if (changeNameBtn) changeNameBtn.onclick = changeNickname;
+            }
             loginPanel.classList.add('hidden');
             chatInterface.classList.remove('hidden');
-            await loadUserNickname(user.uid);
             loadMessages();
         } else {
+            // Пользователь вышел
             currentUser = null;
+            isAdmin = false;
+            adminButtons.style.display = "none";
+            commonButtons.style.display = "none";
             loginPanel.classList.remove('hidden');
             chatInterface.classList.add('hidden');
             if (unsubscribeMessages) unsubscribeMessages();
+            // Не удаляем nickname из localStorage, чтобы при новом входе он подхватился
         }
     });
 
@@ -342,29 +290,27 @@
         if (unsubscribeMessages) unsubscribeMessages();
         unsubscribeMessages = db.collection('messages')
             .orderBy('timestamp', 'desc')
-            .limit(200)
-            .onSnapshot((snapshot) => {
+            .limit(100)
+            .onSnapshot(snapshot => {
                 const msgs = [];
                 snapshot.forEach(doc => msgs.push({ id: doc.id, ...doc.data() }));
                 msgs.sort((a,b) => (a.timestamp?.toMillis() || 0) - (b.timestamp?.toMillis() || 0));
                 renderMessages(msgs);
-            }, (error) => {
+            }, error => {
                 console.error(error);
-                messagesArea.innerHTML = '<div style="color:red;">Ошибка загрузки сообщений. Проверьте правила Firestore.</div>';
+                messagesArea.innerHTML = '<div class="status">⚠️ Ошибка загрузки. Проверьте Firestore Rules.</div>';
             });
     }
 
-    // Отображение сообщений
     function renderMessages(messages) {
         messagesArea.innerHTML = '';
         messages.forEach(msg => {
-            const isOwn = currentUser && msg.uid === currentUser.uid;
+            const isOwn = (currentUser && msg.uid === currentUser.uid);
             const div = document.createElement('div');
             div.className = `message ${isOwn ? 'message-own' : 'message-user'}`;
             const time = msg.timestamp ? new Date(msg.timestamp.toMillis()).toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'}) : '';
-            const displayName = msg.name || 'Аноним';
             div.innerHTML = `
-                <div class="message-name">${escapeHtml(displayName)}</div>
+                <div class="message-name">${escapeHtml(msg.name || 'Аноним')}</div>
                 <div>${escapeHtml(msg.text)}</div>
                 <div class="message-time">${time}</div>
             `;
@@ -373,54 +319,41 @@
         messagesArea.scrollTop = messagesArea.scrollHeight;
     }
 
-    // Отправка сообщения
-    sendBtn.onclick = async () => {
+    // Отправка сообщения с текущим ником
+    sendBtn.onclick = () => {
         if (!currentUser) return;
         const text = messageInput.value.trim();
         if (!text) return;
-        // Используем текущее имя из памяти (или загружаем свежее)
-        let nameToSend = currentNickname;
-        if (!nameToSend) {
-            const doc = await db.collection('users').doc(currentUser.uid).get();
-            nameToSend = doc.exists ? doc.data().nickname : `Слушатель_${currentUser.uid.slice(-4)}`;
-            currentNickname = nameToSend;
-        }
         db.collection('messages').add({
             uid: currentUser.uid,
-            name: nameToSend,
+            name: currentNickname,
             text: text,
             timestamp: firebase.firestore.FieldValue.serverTimestamp()
         }).then(() => messageInput.value = '')
           .catch(e => alert('Ошибка отправки: ' + e.message));
     };
+    messageInput.addEventListener('keypress', e => { if (e.key === 'Enter') sendBtn.click(); });
 
-    messageInput.addEventListener('keypress', (e) => { if (e.key === 'Enter') sendBtn.click(); });
-
-    // Очистка чата (только для администратора – hardcoded uid АТАМАНИ)
-    // Для безопасности: вы должны знать свой uid (можно посмотреть после входа в консоли firebase -> Authentication -> Users)
-    // Или просто разрешить очистку только определённому пользователю.
-    clearChatBtn.onclick = async () => {
-        if (!currentUser) return;
-        // Замените 'ВАШ_UID' на реальный uid вашего аккаунта. 
-        // Чтобы узнать uid: войдите в чат, откройте консоль браузера (F12), введите auth.currentUser.uid
-        // Или посмотрите в Firebase Console -> Authentication -> Users -> ваш анонимный пользователь.
-        const ownerUid = 'ВАШ_UID'; // <-- СЮДА ВСТАВЬТЕ СВОЙ UID
-        if (currentUser.uid !== ownerUid) {
-            alert('Очищать чат может только администратор (АТАМАНИ)');
+    // Функция очистки всех сообщений (только админ)
+    async function clearAllMessages() {
+        if (!isAdmin) {
+            alert("Эта функция доступна только администратору.");
             return;
         }
-        if (confirm('Вы уверены, что хотите удалить ВСЕ сообщения в чате? Это действие необратимо.')) {
+        if (confirm("Вы уверены, что хотите удалить ВСЕ сообщения в чате? Это действие необратимо.")) {
             try {
                 const snapshot = await db.collection('messages').get();
                 const batch = db.batch();
-                snapshot.forEach(doc => batch.delete(doc.ref));
+                snapshot.docs.forEach(doc => {
+                    batch.delete(doc.ref);
+                });
                 await batch.commit();
-                alert('Чат очищен');
-            } catch(e) {
-                alert('Ошибка очистки: ' + e.message);
+                alert("Чат очищен.");
+            } catch (e) {
+                alert("Ошибка очистки: " + e.message);
             }
         }
-    };
+    }
 
     function escapeHtml(str) {
         return str.replace(/[&<>]/g, function(m) {
