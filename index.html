@@ -523,7 +523,7 @@ function renderTracks(){
     row.className='track-row'+(i===curT?' playing':'');
     row.innerHTML=`<div class="t-num">${i===curT&&playing?'<div class="wave-anim"><div class="wb"></div><div class="wb"></div><div class="wb"></div><div class="wb"></div></div>':String(i+1).padStart(2,'0')}</div>
       <button class="t-play" onclick="playT(${i});event.stopPropagation()"><svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor">${isP?'<rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/>':'<path d="M8 5v14l11-7z"/>'}</svg></button>
-      <div><div class="t-name">${esc(t.title)}</div><div class="t-sub">Трек</div></div>
+      <div><div class="t-name">${esc(t.title)}</div><div class="t-sub">АТАМАНИ</div></div>
       <div class="t-dur" id="dur${i}">—</div>
       <button class="t-del" onclick="delTrack('${t.id}',${i});event.stopPropagation()">✕</button>`;
     row.addEventListener('click',()=>playT(i));list.appendChild(row);
