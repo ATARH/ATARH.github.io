@@ -6,7 +6,7 @@
 <title>АТАМАНИ | Музыка человека и ИИ</title>
 <meta property="og:title" content="АТАМАНИ — музыка на стыке человека и нейросети">
 <meta property="og:description" content="Песни, клипы, эксперименты. Слушайте бесплатно.">
-<meta property="og:image" content="https://atarh.github.io/og-preview.jpeg">
+<meta property="og:image" content="https://archive.org/download/og-preview/og-preview.jpeg">
 <meta property="og:url" content="https://atarh.github.io">
 <link rel="manifest" href="manifest.json">
 <meta name="theme-color" content="#FFBB61">
@@ -272,10 +272,10 @@ body.is-admin .save-content-btn{display:block;}
 
 <div class="hero">
   <div class="hero-photo" id="heroWrap">
-    <div class="hero-placeholder" id="heroPlaceholder" onclick="document.getElementById('heroIn').click()">
+    <div class="hero-placeholder" id="heroPlaceholder" style="display:none" onclick="document.getElementById('heroIn').click()">
       <div class="ph">👤</div><span>Нажми чтобы загрузить фото</span>
     </div>
-    <img id="heroImg" style="display:none" alt="">
+    <img id="heroImg" style="display:block" src="https://archive.org/download/e5d0d8d28334dadc6f0cbd6bce6207b9_2ec62062-7414-4256-b542-0c0771fb0ad3_500/e5d0d8d28334dadc6f0cbd6bce6207b9_2ec62062-7414-4256-b542-0c0771fb0ad3_500.jpg" alt="АТАМАНИ">
   </div>
   <div class="hero-grad"></div>
   <button class="photo-upload-btn" onclick="document.getElementById('heroIn').click()">📷 Фото</button>
@@ -302,8 +302,8 @@ body.is-admin .save-content-btn{display:block;}
     <h2 class="sec-title">Обо мне</h2>
     <div class="about-grid">
       <div class="about-photo-wrap" onclick="document.getElementById('aboutIn').click()">
-        <div class="about-ph" id="aboutPh"><div class="ph-icon">🎤</div><span>Нажми для фото</span></div>
-        <img id="aboutImg" style="display:none" alt="">
+        <div class="about-ph" id="aboutPh" style="display:none"><div class="ph-icon">🎤</div><span>Нажми для фото</span></div>
+        <img id="aboutImg" style="display:block;width:100%;height:100%;object-fit:cover;object-position:center top" src="https://archive.org/download/0528a-65302d-3872fbe-21108b-851e-5106-161a-3985-9e-11-4355-a-4e-5-b-79ad-0463907-500/0528a65302d3872fbe21108b851e5106_161a3985-9e11-4355-a4e5-b79ad0463907_500.jpg" alt="АТАМАНИ">
         <div class="about-corner">АТАМАНИ</div>
       </div>
       <input type="file" id="aboutIn" accept="image/*" hidden onchange="loadAboutPhoto(this)">
