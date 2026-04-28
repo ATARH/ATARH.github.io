@@ -187,6 +187,11 @@ footer{padding:2rem 3rem 6rem;border-top:1px solid var(--border);display:flex;al
 .foot-copy{font-size:.6rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
 .foot-link{color:var(--amber);text-decoration:none}
 .hidden{display:none}
+/* SAVE CONTENT BTN */
+.save-content-btn{position:fixed;bottom:80px;right:1.5rem;z-index:400;padding:.65rem 1.5rem;background:var(--amber);color:#000;border:none;font-family:Inter,sans-serif;font-size:.7rem;font-weight:800;letter-spacing:.15em;text-transform:uppercase;cursor:pointer;display:none;transition:all .25s;box-shadow:0 4px 20px rgba(255,187,97,0.3);}
+.save-content-btn:hover{background:#fff;}
+body.is-admin .save-content-btn{display:block;}
+
 /* EDITABLE */
 [contenteditable]{outline:none;cursor:text;border-radius:2px;transition:background .2s,box-shadow .2s}
 [contenteditable]:hover{background:rgba(255,187,97,0.04);box-shadow:0 0 0 1px rgba(255,187,97,0.2)}
@@ -444,6 +449,8 @@ footer{padding:2rem 3rem 6rem;border-top:1px solid var(--border);display:flex;al
   </div>
 </div>
 
+<button class="save-content-btn" onclick="saveContentToFirebase()">💾 Сохранить изменения</button>
+
 <!-- RADIO -->
 <div class="radio-section" id="radio">
   <div class="radio-inner">
@@ -486,54 +493,25 @@ function closeModal(){document.getElementById('adminModal').classList.remove('op
 function checkPass(){
   if(document.getElementById('adminPass').value===ADMIN_PASSWORD){
     isAdmin=true;document.body.classList.add('is-admin');closeModal();showPanels(true);loadTracks();loadClips();
-if(isAdmin||document.getElementById("archiveAccessKey"))loadArchiveKeys();
+loadArchiveKeys();
 
 // ── EDITABLE CONTENT ─────────────────────────────────────────
-const editableIds = ['bioText','heroSub','statYear','boostyLink'];
-
-function saveEditable() {
-  editableIds.forEach(id => {
-    const el = document.getElementById(id);
-    if (el) localStorage.setItem('edit_'+id, el.innerHTML);
-  });
-}
-
-function loadEditable() {
-  editableIds.forEach(id => {
-    const el = document.getElementById(id);
-    if (el) {
-      const saved = localStorage.getItem('edit_'+id);
-      if (saved) el.innerHTML = saved;
-    }
-  });
-}
-
-// Auto-save on input with debounce
-let saveTimer;
-document.addEventListener('input', e => {
-  if (e.target.hasAttribute('contenteditable')) {
-    clearTimeout(saveTimer);
-    saveTimer = setTimeout(saveEditable, 600);
-    // silent auto-save
-  }
-});
-
-// Prevent Enter from creating <div> in contenteditable
+// Prevent Enter from creating <div> in single-line contenteditable
 document.addEventListener('keydown', e => {
   if (e.key === 'Enter' && e.target.hasAttribute('contenteditable') && !e.target.classList.contains('about-bio')) {
     e.preventDefault();
   }
 });
 
-// Load on page start
-loadEditable();
+// Load content from Firebase on page start
+loadContentFromFirebase();
 
   } else {document.getElementById('modalErr').style.display='block';document.getElementById('adminPass').value='';document.getElementById('adminPass').focus();}
 }
 function togglePanels(){const o=document.getElementById('adminTrackPanel').classList.contains('open');showPanels(!o);}
 function showPanels(s){document.getElementById('adminTrackPanel').classList.toggle('open',s);document.getElementById('adminClipPanel').classList.toggle('open',s);if(s)loadArchiveKeys();}
 function adminLogout(){isAdmin=false;document.body.classList.remove('is-admin');showPanels(false);loadTracks();loadClips();
-if(isAdmin||document.getElementById("archiveAccessKey"))loadArchiveKeys();
+loadArchiveKeys();
 
 }
 document.getElementById('adminPass').addEventListener('keydown',e=>{if(e.key==='Enter')checkPass();});
@@ -662,47 +640,18 @@ async function clearChat(){if(!isChatAdmin||!confirm('Удалить все со
 function esc(s){return String(s).replace(/[&<>]/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[m]));}
 
 loadTracks();loadClips();
-if(isAdmin||document.getElementById("archiveAccessKey"))loadArchiveKeys();
+loadArchiveKeys();
 
 // ── EDITABLE CONTENT ─────────────────────────────────────────
-const editableIds = ['bioText','heroSub','statYear','boostyLink'];
-
-function saveEditable() {
-  editableIds.forEach(id => {
-    const el = document.getElementById(id);
-    if (el) localStorage.setItem('edit_'+id, el.innerHTML);
-  });
-}
-
-function loadEditable() {
-  editableIds.forEach(id => {
-    const el = document.getElementById(id);
-    if (el) {
-      const saved = localStorage.getItem('edit_'+id);
-      if (saved) el.innerHTML = saved;
-    }
-  });
-}
-
-// Auto-save on input with debounce
-let saveTimer;
-document.addEventListener('input', e => {
-  if (e.target.hasAttribute('contenteditable')) {
-    clearTimeout(saveTimer);
-    saveTimer = setTimeout(saveEditable, 600);
-    // silent auto-save
-  }
-});
-
-// Prevent Enter from creating <div> in contenteditable
+// Prevent Enter from creating <div> in single-line contenteditable
 document.addEventListener('keydown', e => {
   if (e.key === 'Enter' && e.target.hasAttribute('contenteditable') && !e.target.classList.contains('about-bio')) {
     e.preventDefault();
   }
 });
 
-// Load on page start
-loadEditable();
+// Load content from Firebase on page start
+loadContentFromFirebase();
 
 if('serviceWorker' in navigator)window.addEventListener('load',()=>navigator.serviceWorker.register('sw.js'));
 
@@ -875,6 +824,56 @@ async function uploadToArchive(file) {
     status.style.color = '#e24b4a';
     showToast('❌', 'Ошибка загрузки', e.message);
   }
+}
+
+
+// ── CONTENT SAVE/LOAD VIA FIREBASE ───────────────────────────
+function saveContentToFirebase() {
+  const btn = document.querySelector('.save-content-btn');
+  btn.textContent = 'Сохраняю...';
+  btn.disabled = true;
+
+  const data = {
+    bioText: document.getElementById('bioText')?.innerHTML || '',
+    heroSub: document.getElementById('heroSub')?.innerHTML || '',
+    statYear: document.getElementById('statYear')?.textContent || '2004',
+    boostyLink: document.getElementById('boostyLink')?.textContent || 'Boosty',
+    updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+  };
+
+  db.collection('siteContent').doc('main').set(data)
+    .then(() => {
+      btn.textContent = '✓ Сохранено!';
+      btn.style.background = '#6dc87a';
+      showToast('💾', 'Сохранено!', 'Текст сохранён для всех посетителей');
+      setTimeout(() => {
+        btn.textContent = '💾 Сохранить изменения';
+        btn.style.background = '';
+        btn.disabled = false;
+      }, 2000);
+    })
+    .catch(e => {
+      btn.textContent = '❌ Ошибка';
+      btn.disabled = false;
+      alert('Ошибка: ' + e.message);
+    });
+}
+
+function loadContentFromFirebase() {
+  db.collection('siteContent').doc('main').get()
+    .then(doc => {
+      if (!doc.exists) return;
+      const data = doc.data();
+      if (data.bioText && document.getElementById('bioText'))
+        document.getElementById('bioText').innerHTML = data.bioText;
+      if (data.heroSub && document.getElementById('heroSub'))
+        document.getElementById('heroSub').innerHTML = data.heroSub;
+      if (data.statYear && document.getElementById('statYear'))
+        document.getElementById('statYear').textContent = data.statYear;
+      if (data.boostyLink && document.getElementById('boostyLink'))
+        document.getElementById('boostyLink').textContent = data.boostyLink;
+    })
+    .catch(() => {});
 }
 
 </script>
