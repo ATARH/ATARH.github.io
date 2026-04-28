@@ -321,11 +321,45 @@ footer{padding:2rem 3rem 6rem;border-top:1px solid var(--border);display:flex;al
     <div class="admin-panel" id="adminTrackPanel">
       <div class="admin-panel-title">Добавить трек</div>
       <div class="admin-form">
+
+        <!-- Archive.org keys (stored locally) -->
+        <div id="keysSection" style="background:rgba(255,187,97,0.05);border:1px solid rgba(255,187,97,0.2);padding:1rem;margin-bottom:.5rem;">
+          <div style="font-size:.6rem;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--amber);margin-bottom:.75rem;">🔑 Ключи Archive.org (хранятся только в твоём браузере)</div>
+          <div style="display:flex;flex-direction:column;gap:.5rem;">
+            <input type="text" id="archiveAccessKey" placeholder="Access Key" style="background:var(--bg3);border:1px solid var(--border2);color:var(--text);padding:.6rem 1rem;font-family:monospace;font-size:.8rem;outline:none;">
+            <input type="password" id="archiveSecretKey" placeholder="Secret Key" style="background:var(--bg3);border:1px solid var(--border2);color:var(--text);padding:.6rem 1rem;font-family:monospace;font-size:.8rem;outline:none;">
+            <button onclick="saveArchiveKeys()" style="padding:.5rem 1rem;background:transparent;border:1px solid var(--amber3);color:var(--amber);font-family:Inter,sans-serif;font-size:.65rem;font-weight:700;letter-spacing:.15em;text-transform:uppercase;cursor:pointer;align-self:flex-start;">Сохранить ключи</button>
+          </div>
+          <div id="keysStatus" style="font-size:.65rem;color:var(--muted);margin-top:.5rem;"></div>
+        </div>
+
         <label>Название трека</label>
-        <input type="text" id="trackTitle" placeholder="Например: Электронный рассвет">
-        <label>Прямая ссылка на MP3</label>
-        <input type="url" id="trackUrl" placeholder="https://atarh.github.io/music/song.mp3">
-        <p class="hint">💡 Загрузи MP3 в папку /music/ в репозитории GitHub, потом вставь сюда ссылку</p>
+        <input type="text" id="trackTitle" placeholder="Например: А в Магадане метель">
+
+        <!-- File upload option -->
+        <label>Загрузить MP3 с компьютера</label>
+        <div id="fileUploadZone" style="border:1px dashed var(--border2);padding:1.5rem;text-align:center;cursor:pointer;transition:all .25s;background:var(--bg3);"
+          ondragover="event.preventDefault();this.style.borderColor='#FFBB61'"
+          ondragleave="this.style.borderColor=''"
+          ondrop="handleAudioDrop(event)"
+          onclick="document.getElementById('audioFileIn').click()">
+          <div style="font-size:1.5rem;margin-bottom:.5rem;">🎵</div>
+          <div id="uploadZoneText" style="font-size:.72rem;letter-spacing:.1em;color:var(--muted);">Перетащи MP3 или нажми для выбора</div>
+          <div style="font-size:.6rem;color:var(--muted);opacity:.5;margin-top:.25rem;">MP3, WAV, FLAC</div>
+        </div>
+        <input type="file" id="audioFileIn" accept="audio/*" hidden onchange="handleAudioFile(this.files[0])">
+
+        <!-- Upload progress -->
+        <div id="uploadProgress" style="display:none;">
+          <div style="font-size:.7rem;letter-spacing:.1em;color:var(--amber);margin-bottom:.5rem;" id="uploadStatus">Загружаю...</div>
+          <div style="height:2px;background:var(--bg4);width:100%;">
+            <div id="uploadBar" style="height:100%;background:var(--amber);width:0%;transition:width .3s;"></div>
+          </div>
+        </div>
+
+        <label>или вставь ссылку вручную</label>
+        <input type="url" id="trackUrl" placeholder="https://archive.org/download/...">
+
         <button class="btn-add" onclick="addTrack()">➕ Добавить трек</button>
         <button class="admin-logout" onclick="adminLogout()">🚪 Выйти из панели</button>
       </div>
@@ -452,6 +486,7 @@ function closeModal(){document.getElementById('adminModal').classList.remove('op
 function checkPass(){
   if(document.getElementById('adminPass').value===ADMIN_PASSWORD){
     isAdmin=true;document.body.classList.add('is-admin');closeModal();showPanels(true);loadTracks();loadClips();
+if(isAdmin||document.getElementById("archiveAccessKey"))loadArchiveKeys();
 
 // ── EDITABLE CONTENT ─────────────────────────────────────────
 const editableIds = ['bioText','heroSub','statYear','boostyLink'];
@@ -496,8 +531,9 @@ loadEditable();
   } else {document.getElementById('modalErr').style.display='block';document.getElementById('adminPass').value='';document.getElementById('adminPass').focus();}
 }
 function togglePanels(){const o=document.getElementById('adminTrackPanel').classList.contains('open');showPanels(!o);}
-function showPanels(s){document.getElementById('adminTrackPanel').classList.toggle('open',s);document.getElementById('adminClipPanel').classList.toggle('open',s);}
+function showPanels(s){document.getElementById('adminTrackPanel').classList.toggle('open',s);document.getElementById('adminClipPanel').classList.toggle('open',s);if(s)loadArchiveKeys();}
 function adminLogout(){isAdmin=false;document.body.classList.remove('is-admin');showPanels(false);loadTracks();loadClips();
+if(isAdmin||document.getElementById("archiveAccessKey"))loadArchiveKeys();
 
 }
 document.getElementById('adminPass').addEventListener('keydown',e=>{if(e.key==='Enter')checkPass();});
@@ -626,6 +662,7 @@ async function clearChat(){if(!isChatAdmin||!confirm('Удалить все со
 function esc(s){return String(s).replace(/[&<>]/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[m]));}
 
 loadTracks();loadClips();
+if(isAdmin||document.getElementById("archiveAccessKey"))loadArchiveKeys();
 
 // ── EDITABLE CONTENT ─────────────────────────────────────────
 const editableIds = ['bioText','heroSub','statYear','boostyLink'];
@@ -730,6 +767,111 @@ window.addEventListener('load', () => {
     if (btn) { btn.classList.add('subscribed'); btnText.textContent = 'Уведомления включены ✓'; }
   }
 });
+
+
+// ── ARCHIVE.ORG UPLOAD ───────────────────────────────────────
+function saveArchiveKeys() {
+  const access = document.getElementById('archiveAccessKey').value.trim();
+  const secret = document.getElementById('archiveSecretKey').value.trim();
+  if (!access || !secret) { alert('Введи оба ключа'); return; }
+  localStorage.setItem('archiveAccess', access);
+  localStorage.setItem('archiveSecret', secret);
+  document.getElementById('keysStatus').textContent = '✓ Ключи сохранены';
+  document.getElementById('keysStatus').style.color = '#6dc87a';
+  showToast('🔑', 'Ключи сохранены', 'Теперь можно загружать треки!');
+}
+
+function loadArchiveKeys() {
+  const access = localStorage.getItem('archiveAccess');
+  const secret = localStorage.getItem('archiveSecret');
+  if (access) {
+    document.getElementById('archiveAccessKey').value = access;
+    document.getElementById('keysStatus').textContent = '✓ Ключи загружены';
+    document.getElementById('keysStatus').style.color = '#6dc87a';
+  }
+  if (secret) document.getElementById('archiveSecretKey').value = secret;
+}
+
+function handleAudioDrop(e) {
+  e.preventDefault();
+  document.getElementById('fileUploadZone').style.borderColor = '';
+  const file = e.dataTransfer.files[0];
+  if (file) handleAudioFile(file);
+}
+
+function handleAudioFile(file) {
+  if (!file) return;
+  // Set title from filename if empty
+  const titleEl = document.getElementById('trackTitle');
+  if (!titleEl.value) {
+    titleEl.value = file.name.replace(/\.[^.]+$/, '').replace(/[-_]/g, ' ');
+  }
+  document.getElementById('uploadZoneText').textContent = '📁 ' + file.name;
+  uploadToArchive(file);
+}
+
+async function uploadToArchive(file) {
+  const access = localStorage.getItem('archiveAccess');
+  const secret = localStorage.getItem('archiveSecret');
+  
+  if (!access || !secret) {
+    alert('Сначала введи и сохрани ключи Archive.org!');
+    return;
+  }
+
+  const progress = document.getElementById('uploadProgress');
+  const status = document.getElementById('uploadStatus');
+  const bar = document.getElementById('uploadBar');
+  
+  progress.style.display = 'block';
+  status.textContent = 'Подготовка...';
+  bar.style.width = '5%';
+
+  // Generate unique identifier
+  const identifier = 'atamani-' + Date.now();
+  const safeName = file.name.replace(/[^a-zA-Z0-9.-]/g, '-');
+  const uploadUrl = `https://s3.us.archive.org/${identifier}/${safeName}`;
+
+  try {
+    status.textContent = 'Загружаю файл...';
+    bar.style.width = '20%';
+
+    const response = await fetch(uploadUrl, {
+      method: 'PUT',
+      headers: {
+        'Authorization': `LOW ${access}:${secret}`,
+        'x-archive-meta-mediatype': 'audio',
+        'x-archive-meta-collection': 'opensource_audio',
+        'x-archive-meta-title': document.getElementById('trackTitle').value || file.name,
+        'x-archive-auto-make-bucket': '1',
+        'Content-Type': file.type || 'audio/mpeg',
+      },
+      body: file
+    });
+
+    bar.style.width = '90%';
+
+    if (response.ok || response.status === 200) {
+      bar.style.width = '100%';
+      status.textContent = '✓ Загружено! Получаю ссылку...';
+      
+      // Direct link
+      const directUrl = `https://archive.org/download/${identifier}/${safeName}`;
+      document.getElementById('trackUrl').value = directUrl;
+      
+      status.textContent = '✓ Готово! Нажми "Добавить трек"';
+      status.style.color = '#6dc87a';
+      showToast('🎵', 'Файл загружен!', 'Нажми Добавить трек');
+    } else {
+      throw new Error('Статус: ' + response.status);
+    }
+  } catch (e) {
+    bar.style.width = '0%';
+    status.textContent = '❌ Ошибка: ' + e.message;
+    status.style.color = '#e24b4a';
+    showToast('❌', 'Ошибка загрузки', e.message);
+  }
+}
 
 </script>
 </body>
