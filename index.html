@@ -4,10 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>АТАМАНИ | Музыка человека и ИИ</title>
-    <!-- Open Graph для соцсетей -->
     <meta property="og:title" content="АТАМАНИ — музыка на стыке человека и нейросети">
     <meta property="og:description" content="Песни, клипы, эксперименты. Слушайте бесплатно.">
-    <meta property="og:image" content="og-preview.jpeg">
+    <meta property="og:image" content="https://ATARH.github.io/og-preview.jpeg">
+    <meta property="og:image:type" content="image/jpeg">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
     <meta property="og:url" content="https://ATARH.github.io">
     <!-- Firebase SDK -->
     <script src="https://www.gstatic.com/firebasejs/10.13.0/firebase-app-compat.js"></script>
@@ -26,7 +28,6 @@
             margin: 0 auto;
             padding: 20px;
         }
-        /* Шапка и меню */
         header {
             background: #111;
             padding: 20px 0;
@@ -56,7 +57,6 @@
         .nav a:hover {
             color: #f5c542;
         }
-        /* Секции */
         section {
             margin-bottom: 50px;
         }
@@ -94,7 +94,6 @@
             height: 180px;
             border-radius: 8px;
         }
-        /* Чат */
         .chat-section {
             background: #111;
             border-radius: 16px;
@@ -117,7 +116,7 @@
             display: flex;
             gap: 10px;
         }
-        .chat-buttons button, .chat-buttons a {
+        .chat-buttons button {
             background: #2c2c2c;
             border: none;
             padding: 6px 12px;
@@ -125,10 +124,8 @@
             color: #eee;
             cursor: pointer;
             font-size: 0.8rem;
-            text-decoration: none;
-            transition: 0.2s;
         }
-        .chat-buttons button:hover, .chat-buttons a:hover {
+        .chat-buttons button:hover {
             background: #f5c542;
             color: #111;
         }
@@ -240,7 +237,6 @@
 </header>
 
 <div class="container">
-    <!-- О себе -->
     <section id="bio">
         <div class="bio">
             <h2 class="section-title">Обо мне</h2>
@@ -250,13 +246,12 @@
         </div>
     </section>
 
-    <!-- Музыка (примеры) -->
     <section id="music">
         <h2 class="section-title">🎧 Музыка</h2>
         <div class="music-grid">
             <div class="music-card">
                 <div>🎵 Трек 1 — «Электронный рассвет»</div>
-                <audio controls src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3">Your browser does not support the audio element.</audio>
+                <audio controls src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3"></audio>
             </div>
             <div class="music-card">
                 <div>🎵 Трек 2 — «Лунный алгоритм»</div>
@@ -270,7 +265,6 @@
         <p style="text-align: center; margin-top: 15px; color: #aaa;">📌 Загрузите свои реальные треки, заменив ссылки в коде (выше — примеры).</p>
     </section>
 
-    <!-- Клипы (примеры) -->
     <section id="videos">
         <h2 class="section-title">🎬 Клипы</h2>
         <div class="video-grid">
@@ -286,7 +280,6 @@
         <p style="text-align: center; margin-top: 15px; color: #aaa;">📌 Замените видео на свои (вставьте ссылки ваших клипов).</p>
     </section>
 
-    <!-- Чат (встроенный) -->
     <section id="chat-jump" class="chat-section">
         <div class="chat-header">
             <h3>💬 Чат слушателей</h3>
@@ -320,7 +313,6 @@
 </div>
 
 <script>
-    // ========== НАСТРОЙКИ FIREBASE ==========
     const firebaseConfig = {
         apiKey: "AIzaSyBM2BzycMF6u-WAazEO1mv6baWV2U8PfY0",
         authDomain: "atamanichat.firebaseapp.com",
@@ -334,7 +326,6 @@
     const auth = firebase.auth();
     const db = firebase.firestore();
 
-    // Элементы чата
     const loginPanel = document.getElementById('loginPanelChat');
     const chatInterface = document.getElementById('chatInterfaceChat');
     const loginBtn = document.getElementById('loginChatBtn');
@@ -354,8 +345,7 @@
     let unsubscribeMessages = null;
     let isAdmin = false;
 
-    // 👑 ВСТАВЬТЕ СВОЙ UID (как узнать: один раз войдите в чат, в консоли браузера введите firebase.auth().currentUser.uid)
-    const ADMIN_UID = "ВАШ_UID_ВСТАВЬТЕ_СЮДА";
+    const ADMIN_UID = "ВАШ_UID_ВСТАВЬТЕ_СЮДА"; // Узнайте его через консоль (один раз)
 
     loginBtn.onclick = () => {
         let nickname = nicknameInput.value.trim();
