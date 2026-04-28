@@ -187,6 +187,16 @@ footer{padding:2rem 3rem 6rem;border-top:1px solid var(--border);display:flex;al
 .foot-copy{font-size:.6rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
 .foot-link{color:var(--amber);text-decoration:none}
 .hidden{display:none}
+/* EDITABLE */
+[contenteditable]{outline:none;cursor:text;border-radius:2px;transition:background .2s,box-shadow .2s}
+[contenteditable]:hover{background:rgba(255,187,97,0.04);box-shadow:0 0 0 1px rgba(255,187,97,0.2)}
+[contenteditable]:focus{background:rgba(255,187,97,0.07);box-shadow:0 0 0 1px rgba(255,187,97,0.4)}
+.edit-hint{font-size:.58rem;letter-spacing:.12em;text-transform:uppercase;color:var(--amber);opacity:0;transition:opacity .3s;margin-bottom:.5rem;display:block}
+[contenteditable]:hover ~ .edit-hint,[contenteditable]:focus ~ .edit-hint{opacity:.6}
+.edit-wrap{position:relative}
+.edit-wrap .edit-badge{position:absolute;top:-1.2rem;right:0;font-size:.55rem;letter-spacing:.15em;text-transform:uppercase;color:var(--amber);opacity:0;transition:opacity .2s;pointer-events:none}
+.edit-wrap:hover .edit-badge,.edit-wrap:focus-within .edit-badge{opacity:.5}
+
 
 /* TOAST */
 .toast-wrap{position:fixed;top:80px;right:1.5rem;z-index:1000;display:flex;flex-direction:column;gap:.75rem;pointer-events:none}
@@ -268,7 +278,7 @@ footer{padding:2rem 3rem 6rem;border-top:1px solid var(--border);display:flex;al
   <div class="hero-content">
     <div class="hero-tag">Официальный сайт</div>
     <h1 class="hero-name"><div>АТАМАНИ</div><div class="ghost">MUSIC</div></h1>
-    <p class="hero-sub">Музыка на стыке человека и нейросети. Слушай бесплатно.</p>
+    <p class="hero-sub" contenteditable="true" id="heroSub" spellcheck="false">Музыка на стыке человека и нейросети. Слушай бесплатно.</p>
     <div class="hero-btns">
       <a href="#music" class="btn-primary"><svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>Слушать</a>
       <a href="#about" class="btn-ghost">Обо мне</a>
@@ -293,11 +303,11 @@ footer{padding:2rem 3rem 6rem;border-top:1px solid var(--border);display:flex;al
       </div>
       <input type="file" id="aboutIn" accept="image/*" hidden onchange="loadAboutPhoto(this)">
       <div>
-        <div class="about-bio">Привет, я <strong>АТАМАНИ</strong>. Я занимаюсь музыкой, в которой человек и нейросеть — соавторы. Началось всё как эксперимент 20 лет назад — с обычных музыкальных редакторов. Сегодня вопрос «может ли алгоритм написать мелодию, которую я сам не смог бы придумать?» звучит как никогда остро.<br><br>Сейчас у меня большое количество треков: часть с клипами, часть — чистая электроника, часть — песни с синтезированным вокалом и моими текстами… и текстами моей мамы.<br><br><strong>Всё, что здесь есть, можно слушать бесплатно.</strong></div>
+        <span class="edit-badge">✏ редактировать</span><div class="about-bio edit-wrap"><div contenteditable="true" id="bioText" spellcheck="false">Привет, я <strong>АТАМАНИ</strong>. Я занимаюсь музыкой, в которой человек и нейросеть — соавторы. Началось всё как эксперимент 20 лет назад — с обычных музыкальных редакторов. Сегодня вопрос «может ли алгоритм написать мелодию, которую я сам не смог бы придумать?» звучит как никогда остро.<br><br>Сейчас у меня большое количество треков: часть с клипами, часть — чистая электроника, часть — песни с синтезированным вокалом и моими текстами… и текстами моей мамы.<br><br><strong>Всё, что здесь есть, можно слушать бесплатно.</strong></div></div>
         <div class="about-stats">
           <div class="stat-box"><span class="stat-num" id="statTracks">0</span><div class="stat-label">Треков</div></div>
           <div class="stat-box"><span class="stat-num" id="statClips">0</span><div class="stat-label">Клипов</div></div>
-          <div class="stat-box"><span class="stat-num">2004</span><div class="stat-label">С года</div></div>
+          <div class="stat-box"><span class="stat-num" contenteditable="true" id="statYear" spellcheck="false">2004</span><div class="stat-label">С года</div></div>
         </div>
       </div>
     </div>
@@ -419,7 +429,7 @@ footer{padding:2rem 3rem 6rem;border-top:1px solid var(--border);display:flex;al
 
 <footer>
   <div class="foot-logo">АТАМАНИ</div>
-  <p class="foot-copy">© 2026 · <a href="#" class="foot-link">Boosty</a></p>
+  <p class="foot-copy">© 2026 · <a href="#" class="foot-link" contenteditable="true" id="boostyLink" spellcheck="false">Boosty</a></p>
 </footer>
 
 <script>
@@ -442,11 +452,54 @@ function closeModal(){document.getElementById('adminModal').classList.remove('op
 function checkPass(){
   if(document.getElementById('adminPass').value===ADMIN_PASSWORD){
     isAdmin=true;document.body.classList.add('is-admin');closeModal();showPanels(true);loadTracks();loadClips();
+
+// ── EDITABLE CONTENT ─────────────────────────────────────────
+const editableIds = ['bioText','heroSub','statYear','boostyLink'];
+
+function saveEditable() {
+  editableIds.forEach(id => {
+    const el = document.getElementById(id);
+    if (el) localStorage.setItem('edit_'+id, el.innerHTML);
+  });
+}
+
+function loadEditable() {
+  editableIds.forEach(id => {
+    const el = document.getElementById(id);
+    if (el) {
+      const saved = localStorage.getItem('edit_'+id);
+      if (saved) el.innerHTML = saved;
+    }
+  });
+}
+
+// Auto-save on input with debounce
+let saveTimer;
+document.addEventListener('input', e => {
+  if (e.target.hasAttribute('contenteditable')) {
+    clearTimeout(saveTimer);
+    saveTimer = setTimeout(saveEditable, 600);
+    // silent auto-save
+  }
+});
+
+// Prevent Enter from creating <div> in contenteditable
+document.addEventListener('keydown', e => {
+  if (e.key === 'Enter' && e.target.hasAttribute('contenteditable') && !e.target.classList.contains('about-bio')) {
+    e.preventDefault();
+  }
+});
+
+// Load on page start
+loadEditable();
+
   } else {document.getElementById('modalErr').style.display='block';document.getElementById('adminPass').value='';document.getElementById('adminPass').focus();}
 }
 function togglePanels(){const o=document.getElementById('adminTrackPanel').classList.contains('open');showPanels(!o);}
 function showPanels(s){document.getElementById('adminTrackPanel').classList.toggle('open',s);document.getElementById('adminClipPanel').classList.toggle('open',s);}
-function adminLogout(){isAdmin=false;document.body.classList.remove('is-admin');showPanels(false);loadTracks();loadClips();}
+function adminLogout(){isAdmin=false;document.body.classList.remove('is-admin');showPanels(false);loadTracks();loadClips();
+
+}
 document.getElementById('adminPass').addEventListener('keydown',e=>{if(e.key==='Enter')checkPass();});
 document.getElementById('adminModal').addEventListener('click',function(e){if(e.target===this)closeModal();});
 
@@ -573,6 +626,47 @@ async function clearChat(){if(!isChatAdmin||!confirm('Удалить все со
 function esc(s){return String(s).replace(/[&<>]/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[m]));}
 
 loadTracks();loadClips();
+
+// ── EDITABLE CONTENT ─────────────────────────────────────────
+const editableIds = ['bioText','heroSub','statYear','boostyLink'];
+
+function saveEditable() {
+  editableIds.forEach(id => {
+    const el = document.getElementById(id);
+    if (el) localStorage.setItem('edit_'+id, el.innerHTML);
+  });
+}
+
+function loadEditable() {
+  editableIds.forEach(id => {
+    const el = document.getElementById(id);
+    if (el) {
+      const saved = localStorage.getItem('edit_'+id);
+      if (saved) el.innerHTML = saved;
+    }
+  });
+}
+
+// Auto-save on input with debounce
+let saveTimer;
+document.addEventListener('input', e => {
+  if (e.target.hasAttribute('contenteditable')) {
+    clearTimeout(saveTimer);
+    saveTimer = setTimeout(saveEditable, 600);
+    // silent auto-save
+  }
+});
+
+// Prevent Enter from creating <div> in contenteditable
+document.addEventListener('keydown', e => {
+  if (e.key === 'Enter' && e.target.hasAttribute('contenteditable') && !e.target.classList.contains('about-bio')) {
+    e.preventDefault();
+  }
+});
+
+// Load on page start
+loadEditable();
+
 if('serviceWorker' in navigator)window.addEventListener('load',()=>navigator.serviceWorker.register('sw.js'));
 
 // ── TOAST ────────────────────────────────────────────────────
